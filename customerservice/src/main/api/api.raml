@@ -1,0 +1,130 @@
+#%RAML 1.0
+title: CustomerAPI
+version: v1
+protocols: [ HTTPS, HTTP ]
+baseUri: http://www.example-api.com/{version}
+
+mediaType: application/json
+
+types:
+  Customer:
+    type: object
+    properties:
+      customerid:
+        required: true
+      firstname: 
+        required: true
+        type: string
+      lastname: 
+        required: true 
+        type: string
+      address:
+        required: true  
+        type: string
+  Order:
+    type: object
+    properties:
+      orderid: 
+        required: true 
+        type: number
+      customer: Customer
+      quantity: number
+      price: number
+      product: Product
+  
+  Product:
+    type: object
+    properties:
+      productName:
+        required: true 
+        type: string
+      category: string
+      
+  Result: 
+    type: object
+    properties:
+      result: string
+      code: number
+      
+      
+      
+  
+
+/customers:
+  get:
+   description: Retrieve list of customers
+   responses:
+      200:
+        body:
+          application/json:
+            type: Customer[]
+      400:
+        description: Bad request
+        body:
+          application/json:
+          
+  post:
+    headers:
+      UserID:
+        description: the identifier for the customer representative who posts a new customer
+        type: string
+        
+    body:
+      application/json:
+        type: Customer
+    responses:
+      200:
+        body:
+          application/json:
+            type: Result
+      
+      400:
+        body:
+          application/json:
+            type: Result
+            
+              
+        
+/{customerid}:
+  uriParameters: 
+    customerid:
+      type: number
+      example: 1
+  get:
+    description: get the customer details by customerid
+    body:
+      application/json:
+        type: Customer
+    
+    
+        
+  put:
+    description: Update a customer by customerId
+    body:
+      application/json:
+        type: Customer
+    responses:
+      200:
+        body:
+          application/json:
+            type: Result
+            example: |
+              {
+                    "result":"Successfully updated the customer",
+                    "code": 200
+              }
+        
+        
+          
+  delete:
+    description: Deleted a customer by customerId
+    responses: 
+      200:
+        description: Sucessfully deleted the specific record
+        body: 
+          application/json:
+           
+        
+ 
+      
+    
